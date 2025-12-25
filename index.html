@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle of Wisdom - Tarot Messages</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Eb+Garamond:wght@400;500&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Eb Garamond', serif;
+            background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #000033 100%);
+            color: #f4e8d1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: twinkle 20s infinite linear;
+            z-index: -1;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        
+        .container {
+            max-width: 500px; width: 90%; text-align: center; padding: 2rem 1rem;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+            border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+        h1 {
+            font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 5vw, 3rem);
+            background: linear-gradient(45deg, #ffd700, #ffed4a, #fff); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem; text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+        .tarot-card {
+            width: 200px; height: 300px; margin: 2rem auto;
+            background: linear-gradient(145deg, #2d1b69, #1e0f3d);
+            border-radius: 20px; position: relative; cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+        .tarot-card:hover {
+            transform: translateY(-10px) rotateY(10deg) rotateX(5deg);
+            box-shadow: 0 25px 50px rgba(255,215,0,0.2);
+        }
+        .tarot-front {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(145deg, #4a37a5, #2d1b69);
+            border-radius: 20px; padding: 1.5rem;
+            backface-visibility: hidden; display: flex; flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-symbol { font-size: 3rem; color: #ffd700; }
+        .card-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; }
+        .message-area {
+            min-height: 200px; margin: 2rem 0; padding: 2rem;
+            background: rgba(0,0,0,0.3); border-radius: 15px;
+            font-size: clamp(1rem, 3vw, 1.2rem); line-height: 1.6;
+            border-left: 4px solid #ffd700;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #1a0033; border: none; padding: 1rem 2rem;
+            font-family: 'Cinzel', serif; font-size: 1.1rem; border-radius: 50px;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(255,215,0,0.4);
+            margin-top: 1rem;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(255,215,0,0.6); }
+        .btn:active { transform: translateY(-1px); }
+        .reveal { animation: reveal 1s ease-out; }
+        @keyframes reveal {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 1.5rem 1rem; }
+            .tarot-card { width: 160px; height: 240px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <h1>Oracle of Ancient Wisdom</h1>
+        <div class="tarot-card" id="card" onclick="drawMessage()">
+            <div class="tarot-front">
+                <div class="card-symbol">✦</div>
+                <div class="card-title">Tap the Card</div>
+                <div>or Click Button Below</div>
+            </div>
+        </div>
+        <div class="message-area" id="message">Seek guidance from the ancient spirits. Draw your oracle card to receive a message of wisdom and insight.</div>
+        <button class="btn" onclick="drawMessage()">Draw Oracle Message</button>
+    </div>
+
+    <script>
+        const oracleMessages = [
+            "Trust the journey. Every step leads you closer to your destiny.",
+            "Release what no longer serves you. New beginnings await.",
+            "Your inner strength is greater than any obstacle.",
+            "Patience brings clarity. Wait for the right moment.",
+            "Love yourself first. From this flows all abundance.",
+            "Forgiveness frees your soul. Let go of past burdens.",
+            "Creativity flows when you silence doubt.",
+            "The universe conspires to help those who help themselves.",
+            "Small consistent actions create massive transformation.",
+            "Your intuition speaks truth. Learn to listen.",
+            "Gratitude multiplies blessings. Give thanks daily.",
+            "Boundaries protect your energy. Honor your worth.",
+            "Rest is productive. Honor your need for renewal.",
+            "Authenticity attracts your tribe. Be unapologetically you.",
+            "Challenges build character. Embrace the lessons.",
+            "Joy is your natural state. Choose it consciously.",
+            "Healing begins with acceptance. Love all parts of you.",
+            "Success follows aligned action. Trust your path.",
+            "Silence holds wisdom. Embrace moments of stillness.",
+            "Generosity returns multiplied. Give freely.",
+            "Your presence is your power. Own every room.",
+            "Vulnerability connects hearts. Share your truth.",
+            "Discipline creates freedom. Commit to your vision.",
+            "Nature heals. Spend time with the earth.",
+            "Dreams manifest through focused intention.",
+            "Kindness ripples outward. Be gentle with all.",
+            "Change is constant. Flow with life's currents.",
+            "Self-care is sacred. Prioritize your well-being.",
+            "Truth sets you free. Speak from the heart.",
+            "Playfulness rejuvenates the spirit. Laugh often.",
+            "Ancestors guide you. Honor their wisdom.",
+            "Perseverance wins battles. Never surrender your vision.",
+            "Compassion heals wounds. Extend it to yourself first.",
+            "Simplicity reveals truth. Let go of excess.",
+            "Courage lives in the heart. Act despite fear.",
+            "Harmony arises from balance. Center yourself.",
+            "Wisdom grows through reflection. Pause and ponder.",
+            "Abundance surrounds you. Open your eyes to see it.",
+            "Faith moves mountains. Believe in your power.",
+            "Gentleness conquers force. Lead with soft strength.",
+            "Memories shape but don't define you. Choose your story.",
+            "Synchronicity guides you. Notice the signs.",
+            "Purpose reveals itself through service. Give your gifts.",
+            "Peace lives within. Seek it there first.",
+            "Transformation requires surrender. Let go and trust.",
+            "Beauty exists in imperfection. Embrace your flaws.",
+            "Time heals when given space. Be patient with process.",
+            "Magic happens in presence. Be here now.",
+            "Souls recognize each other. Trust those connections.",
+            "Energy follows attention. Focus on what you desire.",
+            "Legacy builds through daily choices. Choose wisely.",
+            "Divine timing perfects all. Trust the unfolding.",
+            "Inner peace radiates outward. Cultivate stillness.",
+            "Ancient wisdom lives in your DNA. Access it.",
+            "Every ending births beginning. Embrace transition.",
+            "Sacred geometry patterns your life. Trust the design.",
+            "Starlight guides your path. Follow inner light.",
+            "Elemental forces support you. Call upon nature.",
+            "Akashic records hold your story. Remember your power.",
+            "Crystal frequencies align your energy. Choose wisely.",
+            "Lunar cycles teach rhythm. Honor natural flow.",
+            "Solar fire ignites purpose. Shine your light.",
+            "Ancestral altars strengthen connection. Honor lineage.",
+            "Chakra alignment creates harmony. Balance your centers.",
+            "Aura cleansing clears obstacles. Protect your field.",
+            "Sacred geometry heals. Surround yourself with patterns.",
+            "Oracle speaks through symbols. Learn their language.",
+            "Tarot reveals patterns. Study life's cycles.",
+            "Runes whisper ancient wisdom. Listen closely.",
+            "Pendulum points to truth. Trust its swing.",
+            "Numerology reveals destiny. Notice repeating numbers.",
+            "Astrology maps your journey. Study the stars.",
+            "Herbal allies support healing. Learn their medicine.",
+            "Sound healing vibrates truth. Use sacred tones.",
+            "Color therapy balances energy. Surround with healing hues.",
+            "Aromatherapy awakens memory. Choose scents wisely.",
+            "Movement frees stagnant energy. Dance your truth.",
+            "Breathwork connects spirit. Practice conscious breathing.",
+            "Journaling reveals subconscious. Write your soul's language.",
+            "Meditation opens the third eye. Practice daily.",
+            "Visualization creates reality. See your dreams clearly.",
+            "Affirmations reprogram beliefs. Speak your truth.",
+            "Gratitude shifts vibration. Thank the universe.",
+            "Forgiveness ceremony releases karma. Set yourself free.",
+            "Cord cutting ceremony cleanses attachments. Reclaim power.",
+            "Smudging ceremony purifies space. Clear old energy.",
+            "Full moon ceremony releases. Let go consciously.",
+            "New moon ceremony plants seeds. Set intentions.",
+            "Equinox ceremony balances. Harmonize opposites.",
+            "Solstice ceremony celebrates. Honor light's return.",
+            "Your soul chose this path. Trust the journey.",
+            "Higher self guides you. Tune into inner wisdom.",
+            "Spirit team supports you. Ask for signs.",
+            "Universe responds to intention. Be clear and specific.",
+            "Manifestation accelerates through aligned action. Do the work."
+        ];
+
+        function drawMessage() {
+            const card = document.getElementById('card');
+            const messageArea = document.getElementById('message');
+            const randomIndex = Math.floor(Math.random() * oracleMessages.length);
+            const message = oracleMessages[randomIndex];
+            
+            card.style.transform = 'rotateY(360deg) scale(1.05)';
+            messageArea.textContent = message;
+            messageArea.classList.add('reveal');
+            
+            setTimeout(() => {
+                card.style.transform = 'none';
+            }, 600);
+        }
+    </script>
+</body>
+</html>
