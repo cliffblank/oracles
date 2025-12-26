@@ -1,0 +1,234 @@
+/* --- Base Layout --- */
+
+body {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0b0b0b 100%);
+    color: #eee;
+    font-family: 'Georgia', serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: background 0.8s ease;
+}
+
+/* Soft vignette */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+    z-index: 0;
+}
+
+/* Floating dust particles */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.15), transparent),
+        radial-gradient(2px 2px at 70% 80%, rgba(255,255,255,0.1), transparent),
+        radial-gradient(2px 2px at 40% 60%, rgba(255,255,255,0.12), transparent);
+    animation: floatParticles 12s infinite linear;
+    opacity: 0.4;
+    z-index: 1;
+}
+
+@keyframes floatParticles {
+    from { transform: translateY(0); }
+    to { transform: translateY(-40px); }
+}
+
+.container {
+    text-align: center;
+    max-width: 650px;
+    padding: 20px;
+    position: relative;
+    z-index: 3;
+}
+
+/* --- Title --- */
+
+.title {
+    font-size: 3.2rem;
+    margin-bottom: 25px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    text-shadow: 0 0 12px rgba(255,255,255,0.15);
+    animation: fadeIn 1.2s ease forwards;
+}
+
+/* --- Controls --- */
+
+.controls {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.controls label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-right: 5px;
+}
+
+.controls select {
+    background-color: #1c1c1c;
+    color: #eee;
+    border: 1px solid #444;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.controls select:hover {
+    border-color: #777;
+    box-shadow: 0 0 8px rgba(255,255,255,0.1);
+}
+
+/* --- Message Card --- */
+
+.message {
+    font-size: 1.6rem;
+    margin: 35px auto;
+    min-height: 100px;
+    line-height: 1.5;
+    padding: 25px 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: translateY(10px) rotateY(0deg);
+    transition: opacity 0.4s ease, transform 0.6s ease;
+    perspective: 1000px;
+    position: relative;
+}
+
+/* Glowing sigil behind card */
+.message::before {
+    content: "";
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.message.revealed::before {
+    opacity: 1;
+}
+
+/* Card flip reveal */
+.message.revealed {
+    opacity: 1;
+    transform: translateY(0) rotateY(0deg);
+}
+
+.message.shuffle {
+    animation: shuffleCard 0.6s ease;
+}
+
+@keyframes shuffleCard {
+    0% { transform: rotateY(0deg); }
+    40% { transform: rotateY(90deg); opacity: 0; }
+    60% { transform: rotateY(90deg); opacity: 0; }
+    100% { transform: rotateY(0deg); opacity: 1; }
+}
+
+/* --- Button --- */
+
+.button {
+    background: linear-gradient(135deg, #333, #222);
+    color: #eee;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.25s ease, transform 0.15s ease;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #555, #333);
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* --- Deck Themes --- */
+
+/* Core Oracle — silver/white glow */
+body.core-theme {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0b0b0b 100%);
+}
+body.core-theme .message {
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 0 25px rgba(200,200,255,0.25);
+}
+
+/* Shadow Oracle — deep crimson */
+body.shadow-theme {
+    background: radial-gradient(circle at center, #1a0a0a 0%, #080000 100%);
+}
+body.shadow-theme .message {
+    border-color: rgba(150,0,0,0.25);
+    box-shadow: 0 0 25px rgba(255,0,0,0.25);
+}
+
+/* Connection Oracle — warm gold */
+body.connection-theme {
+    background: radial-gradient(circle at center, #2a1f00 0%, #0d0a00 100%);
+}
+body.connection-theme .message {
+    border-color: rgba(255,200,80,0.25);
+    box-shadow: 0 0 25px rgba(255,200,80,0.25);
+}
+
+/* Momentum Oracle — electric blue */
+body.momentum-theme {
+    background: radial-gradient(circle at center, #001a2a 0%, #00070d 100%);
+}
+body.momentum-theme .message {
+    border-color: rgba(80,180,255,0.25);
+    box-shadow: 0 0 25px rgba(80,180,255,0.25);
+}
+
+/* --- Animations --- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 600px) {
+    .title {
+        font-size: 2.4rem;
+    }
+
+    .message {
+        font-size: 1.3rem;
+        padding: 20px;
+    }
+
+    .button {
+        font-size: 1.1rem;
+        padding: 12px 30px;
+    }
+}
