@@ -124,7 +124,7 @@ body {
     padding: 30px 20px;
     background: rgba(10, 12, 20, 0.8);
     border-radius: 12px;
-    min-height: 120px;
+    min-height: 140px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -136,10 +136,31 @@ body {
     transform: translateY(0);
 }
 
+/* Icon above message */
+.message-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 14px auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 6px #d4a93a);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.card.visible .message-icon {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Message text */
 .message {
     font-size: 1.3rem;
     line-height: 1.4;
     color: #f5d98c;
+    white-space: pre-wrap;
 }
 
 /* Icon backgrounds */
@@ -155,23 +176,3 @@ body {
 [data-icon="10"] { background-image: url('icons/momentum.svg'); }
 [data-icon="11"] { background-image: url('icons/courage.svg'); }
 [data-icon="12"] { background-image: url('icons/breakthrough.svg'); }
-
-.message-icon {
-    width: 28px;
-    height: 28px;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 0 auto 12px auto;
-    filter: drop-shadow(0 0 6px #d4a93a);
-}
-.message-icon {
-    opacity: 0;
-    transform: translateY(-4px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.card.visible .message-icon {
-    opacity: 1;
-    transform: translateY(0);
-}
