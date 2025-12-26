@@ -8,7 +8,7 @@ async function loadDatabase() {
         locateFile: file => `js/${file}`
     });
 
-    const response = await fetch("js/oracle.db?v=" + Date.now());
+    const response = await fetch("data/oracle.db?v=" + Date.now());
     const buffer = await response.arrayBuffer();
     db = new SQL.Database(new Uint8Array(buffer));
 
