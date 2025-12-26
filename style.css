@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: #0d0d0f;
+    background: radial-gradient(circle at top, #0a0f1a, #05060a 60%, #000 100%);
     color: white;
     font-family: "Inter", sans-serif;
     display: flex;
@@ -22,6 +22,7 @@ body {
     font-size: 2.4rem;
     margin-bottom: 30px;
     letter-spacing: 1px;
+    color: #f5d98c;
 }
 
 /* Controls */
@@ -32,56 +33,72 @@ body {
     margin-bottom: 25px;
 }
 
-.control-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+/* Mystical Dropdown */
+.dropdown {
+    position: relative;
+    width: 180px;
+    cursor: pointer;
+    user-select: none;
 }
 
-label {
-    font-size: 0.85rem;
-    margin-bottom: 4px;
-    opacity: 0.8;
-}
-
-select {
-    padding: 8px 10px;
-    border-radius: 6px;
-    background: #1a1a1d;
-    color: white;
-    border: 1px solid #333;
+.dropdown-selected {
+    padding: 10px 14px;
+    background: rgba(10, 12, 20, 0.8);
+    border: 1px solid #d4a93a;
+    border-radius: 8px;
+    color: #f5d98c;
     font-size: 0.95rem;
+    backdrop-filter: blur(4px);
+    transition: box-shadow 0.2s ease;
 }
 
-/* Category Icons */
-.category-wrapper select option {
-    padding-left: 28px;
+.dropdown-selected:hover {
+    box-shadow: 0 0 12px #d4a93a;
+}
+
+.dropdown-list {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: rgba(8, 10, 18, 0.95);
+    border: 1px solid #d4a93a;
+    border-radius: 8px;
+    margin-top: 6px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 50;
+    box-shadow: 0 0 18px rgba(212, 169, 58, 0.4);
+}
+
+/* Smart dropdown: upward opening */
+.dropdown.open-up .dropdown-list {
+    bottom: 100%;
+    margin-bottom: 6px;
+    margin-top: 0;
+}
+
+/* Option rows */
+.dropdown-option {
+    padding: 10px 14px 10px 38px;
+    font-size: 0.95rem;
+    color: #f5d98c;
+    display: flex;
+    align-items: center;
     background-repeat: no-repeat;
-    background-position: 6px center;
+    background-position: 10px center;
     background-size: 18px;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
-option[value="1"] { background-image: url('icons/intuition.svg'); }
-option[value="2"] { background-image: url('icons/timing.svg'); }
-option[value="3"] { background-image: url('icons/energy.svg'); }
-option[value="4"] { background-image: url('icons/clarity.svg'); }
-option[value="5"] { background-image: url('icons/shadow.svg'); }
-option[value="6"] { background-image: url('icons/patterns.svg'); }
-option[value="7"] { background-image: url('icons/healing.svg'); }
-option[value="8"] { background-image: url('icons/connection.svg'); }
-option[value="9"] { background-image: url('icons/attraction.svg'); }
-option[value="10"] { background-image: url('icons/momentum.svg'); }
-option[value="11"] { background-image: url('icons/courage.svg'); }
-option[value="12"] { background-image: url('icons/breakthrough.svg'); }
-
-/* Fade Animation */
-@keyframes fadeInOption {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+.dropdown-option:hover {
+    background-color: rgba(212, 169, 58, 0.15);
+    color: #fff3c2;
 }
 
-.category-wrapper select option.fade-in {
-    animation: fadeInOption 0.25s ease forwards;
+/* Hidden options */
+.dropdown-option.hidden {
+    display: none;
 }
 
 /* Reveal Button */
@@ -90,27 +107,28 @@ option[value="12"] { background-image: url('icons/breakthrough.svg'); }
     padding: 12px 20px;
     font-size: 1rem;
     border-radius: 8px;
-    background: #444;
-    color: white;
+    background: #d4a93a;
+    color: #000;
     border: none;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .reveal-btn:hover {
-    background: #666;
+    background: #f5d98c;
 }
 
 /* Card */
 .card {
     margin-top: 30px;
     padding: 30px 20px;
-    background: #1a1a1d;
+    background: rgba(10, 12, 20, 0.8);
     border-radius: 12px;
     min-height: 120px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.4s ease, transform 0.4s ease;
+    border: 1px solid #d4a93a;
 }
 
 .card.visible {
@@ -121,10 +139,19 @@ option[value="12"] { background-image: url('icons/breakthrough.svg'); }
 .message {
     font-size: 1.3rem;
     line-height: 1.4;
+    color: #f5d98c;
 }
 
-/* Deck Themes */
-body.core-theme { background: #0d0d0f; }
-body.shadow-theme { background: #2b0d0d; }
-body.connection-theme { background: #1f150a; }
-body.momentum-theme { background: #0a1a24; }
+/* Icon backgrounds */
+[data-icon="1"] { background-image: url('icons/intuition.svg'); }
+[data-icon="2"] { background-image: url('icons/timing.svg'); }
+[data-icon="3"] { background-image: url('icons/energy.svg'); }
+[data-icon="4"] { background-image: url('icons/clarity.svg'); }
+[data-icon="5"] { background-image: url('icons/shadow.svg'); }
+[data-icon="6"] { background-image: url('icons/patterns.svg'); }
+[data-icon="7"] { background-image: url('icons/healing.svg'); }
+[data-icon="8"] { background-image: url('icons/connection.svg'); }
+[data-icon="9"] { background-image: url('icons/attraction.svg'); }
+[data-icon="10"] { background-image: url('icons/momentum.svg'); }
+[data-icon="11"] { background-image: url('icons/courage.svg'); }
+[data-icon="12"] { background-image: url('icons/breakthrough.svg'); }

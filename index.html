@@ -14,20 +14,16 @@
 
         <div class="controls">
 
-            <!-- Deck Select -->
-            <div class="control-group">
-                <label for="deckSelect">Deck</label>
-                <select id="deckSelect">
-                    <option value="any">Any Deck</option>
-                </select>
+            <!-- Deck Dropdown -->
+            <div class="dropdown" id="deckDropdown">
+                <div class="dropdown-selected">Any Deck</div>
+                <div class="dropdown-list"></div>
             </div>
 
-            <!-- Category Select -->
-            <div class="control-group category-wrapper">
-                <label for="categorySelect">Category</label>
-                <select id="categorySelect">
-                    <option value="any">Any Category</option>
-                </select>
+            <!-- Category Dropdown -->
+            <div class="dropdown" id="categoryDropdown">
+                <div class="dropdown-selected">Any Category</div>
+                <div class="dropdown-list"></div>
             </div>
 
         </div>
@@ -40,7 +36,6 @@
 
     </div>
 
-    <!-- SQL.js + Oracle logic -->
     <script src="js/sql-wasm.js"></script>
     <script src="js/oracle.js"></script>
 </body>
