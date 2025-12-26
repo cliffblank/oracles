@@ -1,4 +1,6 @@
-/* Base Layout */
+/* ---------------------------------------------------------
+   GLOBAL LAYOUT + BACKGROUND
+--------------------------------------------------------- */
 body {
     margin: 0;
     padding: 0;
@@ -25,7 +27,9 @@ body {
     color: #f5d98c;
 }
 
-/* Controls */
+/* ---------------------------------------------------------
+   CONTROLS LAYOUT
+--------------------------------------------------------- */
 .controls {
     display: flex;
     gap: 20px;
@@ -33,7 +37,9 @@ body {
     margin-bottom: 25px;
 }
 
-/* Mystical Dropdown */
+/* ---------------------------------------------------------
+   MYSTICAL DROPDOWN (CUSTOM)
+--------------------------------------------------------- */
 .dropdown {
     position: relative;
     width: 180px;
@@ -71,14 +77,14 @@ body {
     box-shadow: 0 0 18px rgba(212, 169, 58, 0.4);
 }
 
-/* Smart dropdown: upward opening */
+/* Smart dropdown: open upward if needed */
 .dropdown.open-up .dropdown-list {
     bottom: 100%;
     margin-bottom: 6px;
     margin-top: 0;
 }
 
-/* Option rows */
+/* Dropdown options */
 .dropdown-option {
     padding: 10px 14px 10px 38px;
     font-size: 0.95rem;
@@ -96,12 +102,13 @@ body {
     color: #fff3c2;
 }
 
-/* Hidden options */
 .dropdown-option.hidden {
     display: none;
 }
 
-/* Reveal Button */
+/* ---------------------------------------------------------
+   REVEAL BUTTON
+--------------------------------------------------------- */
 .reveal-btn {
     margin-top: 10px;
     padding: 12px 20px;
@@ -118,13 +125,15 @@ body {
     background: #f5d98c;
 }
 
-/* Card */
+/* ---------------------------------------------------------
+   MESSAGE CARD
+--------------------------------------------------------- */
 .card {
     margin-top: 30px;
     padding: 30px 20px;
     background: rgba(10, 12, 20, 0.8);
     border-radius: 12px;
-    min-height: 140px;
+    min-height: 160px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -136,26 +145,74 @@ body {
     transform: translateY(0);
 }
 
-/* Icon above message */
+/* ---------------------------------------------------------
+   CATEGORY ICON (LARGE + PULSE + SHIMMER)
+--------------------------------------------------------- */
 .message-icon {
-    width: 128px;
-    height: 128px;
+    width: 64px;
+    height: 64px;
     margin: 0 auto 14px auto;
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;
+
+    /* Base glow */
     filter: drop-shadow(0 0 6px #d4a93a);
+
+    /* Entry animation */
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(0.9);
     transition: opacity 0.4s ease, transform 0.4s ease;
+
+    /* Layered mystical animations */
+    animation:
+        pulseGlow 2.4s ease-in-out infinite,
+        shimmerSweep 3.8s ease-in-out infinite;
 }
 
 .card.visible .message-icon {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
-/* Message text */
+/* Strong mystical pulse */
+@keyframes pulseGlow {
+    0% {
+        transform: scale(0.95);
+        filter: drop-shadow(0 0 6px #d4a93a);
+    }
+    50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 16px #f5d98c);
+    }
+    100% {
+        transform: scale(0.95);
+        filter: drop-shadow(0 0 6px #d4a93a);
+    }
+}
+
+/* Secondary shimmer sweep */
+@keyframes shimmerSweep {
+    0% {
+        filter: drop-shadow(0 0 6px #d4a93a);
+    }
+    40% {
+        filter: drop-shadow(0 0 12px #f5d98c);
+    }
+    50% {
+        filter: drop-shadow(0 0 22px #fff3c2);
+    }
+    60% {
+        filter: drop-shadow(0 0 12px #f5d98c);
+    }
+    100% {
+        filter: drop-shadow(0 0 6px #d4a93a);
+    }
+}
+
+/* ---------------------------------------------------------
+   MESSAGE TEXT
+--------------------------------------------------------- */
 .message {
     font-size: 1.3rem;
     line-height: 1.4;
@@ -163,7 +220,9 @@ body {
     white-space: pre-wrap;
 }
 
-/* Icon backgrounds */
+/* ---------------------------------------------------------
+   CATEGORY ICONS FOR DROPDOWN OPTIONS
+--------------------------------------------------------- */
 [data-icon="1"] { background-image: url('icons/intuition.svg'); }
 [data-icon="2"] { background-image: url('icons/timing.svg'); }
 [data-icon="3"] { background-image: url('icons/energy.svg'); }
