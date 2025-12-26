@@ -138,8 +138,8 @@ body {
 
 /* Icon above message */
 .message-icon {
-    width: 32px;
-    height: 32px;
+    width: 128px;
+    height: 128px;
     margin: 0 auto 14px auto;
     background-size: 100%;
     background-repeat: no-repeat;
