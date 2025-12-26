@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Hands -->
+    <path d="M5.5 14.5c.4 2.2 2 4 4 4.7M18.5 14.5c-.4 2.2-2 4-4 4.7"/>
+    <path d="M7 12.5c0 1.1.6 2.1 1.4 2.8M17 12.5c0 1.1-.6 2.1-1.4 2.8"/>
+    <!-- Spark -->
+    <circle cx="12" cy="9.5" r="1.8"/>
+    <path d="M12 6.8v1M9.9 7.5l.6.7M14.1 7.5l-.6.7"/>
+  </g>
+</svg>
