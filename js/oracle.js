@@ -2,8 +2,11 @@ let db;
 
 // Load DB
 async function loadDatabase() {
-    const SQL = await initSqlJs({ locateFile: file => file });
-    const response = await fetch("data/oracle.db");
+    const SQL = await initSqlJs({
+        locateFile: file => `js/${file}`
+    });
+
+    const response = await fetch("js/oracle.db?v=" + Date.now());
     const buffer = await response.arrayBuffer();
     db = new SQL.Database(new Uint8Array(buffer));
 
@@ -122,11 +125,9 @@ function revealMessage() {
     const card = document.getElementById("card");
     const msg = document.getElementById("message");
 
-    if (rows.length === 0) {
-        msg.textContent = "No messages match this selection.";
-    } else {
-        msg.textContent = rows[0].text;
-    }
+    msg.textContent = rows.length === 0
+        ? "No messages match this selection."
+        : rows[0].text;
 
     card.classList.remove("visible");
     setTimeout(() => card.classList.add("visible"), 50);
