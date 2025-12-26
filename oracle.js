@@ -1,137 +1,143 @@
 let db;
-let deckMap = {}; // id -> name
 
+// Load DB
 async function loadDatabase() {
-    const SQL = await initSqlJs({
-        locateFile: file => `lib/sqljs/${file}`
-    });
-
-    const response = await fetch('data/oracle.db');
+    const SQL = await initSqlJs({ locateFile: file => file });
+    const response = await fetch("data/oracle.db");
     const buffer = await response.arrayBuffer();
     db = new SQL.Database(new Uint8Array(buffer));
 
     populateDecks();
     populateCategories();
-
-    // Set an initial theme
-    applyThemeForDeckValue(document.getElementById("deckSelect").value);
+    filterCategoriesForDeck("any");
 }
 
 function query(sql, params = []) {
     const stmt = db.prepare(sql);
     stmt.bind(params);
-    const results = [];
-    while (stmt.step()) {
-        results.push(stmt.getAsObject());
-    }
+    const rows = [];
+    while (stmt.step()) rows.push(stmt.getAsObject());
     stmt.free();
-    return results;
+    return rows;
 }
 
+/* Populate Decks */
 function populateDecks() {
-    const decks = query("SELECT id, name FROM decks ORDER BY name;");
-    const select = document.getElementById("deckSelect");
+    const deckSelect = document.getElementById("deckSelect");
+    const rows = query("SELECT id, name FROM decks ORDER BY id");
 
-    decks.forEach(deck => {
+    rows.forEach(row => {
         const opt = document.createElement("option");
-        opt.value = deck.id;
-        opt.textContent = deck.name;
-        select.appendChild(opt);
-
-        deckMap[deck.id] = deck.name;
-    });
-
-    // When deck changes, update theme
-    select.addEventListener("change", () => {
-        applyThemeForDeckValue(select.value);
+        opt.value = row.id;
+        opt.textContent = row.name;
+        deckSelect.appendChild(opt);
     });
 }
 
+/* Populate Categories */
 function populateCategories() {
-    const cats = query("SELECT id, name FROM categories ORDER BY name;");
-    const select = document.getElementById("categorySelect");
+    const catSelect = document.getElementById("categorySelect");
+    const rows = query("SELECT id, name FROM categories ORDER BY id");
 
-    cats.forEach(cat => {
+    rows.forEach(row => {
         const opt = document.createElement("option");
-        opt.value = cat.id;
-        opt.textContent = cat.name;
-        select.appendChild(opt);
+        opt.value = row.id;
+        opt.textContent = row.name;
+        catSelect.appendChild(opt);
     });
 }
 
-function applyThemeForDeckValue(deckValue) {
-    const body = document.body;
+/* Filter Categories by Deck */
+function filterCategoriesForDeck(deckValue) {
+    const catSelect = document.getElementById("categorySelect");
 
-    // Clear all theme classes
-    body.classList.remove("core-theme", "shadow-theme", "connection-theme", "momentum-theme");
-
-    // "Any Deck" → default to Core theme
     if (deckValue === "any") {
-        body.classList.add("core-theme");
+        for (let option of catSelect.options) {
+            option.hidden = false;
+            option.classList.add("fade-in");
+        }
         return;
     }
 
-    const deckName = deckMap[deckValue];
-    if (!deckName) {
-        body.classList.add("core-theme");
-        return;
-    }
+    const rows = query(
+        "SELECT DISTINCT category_id FROM messages WHERE deck_id = ?",
+        [deckValue]
+    );
 
-    const normalized = deckName.toLowerCase();
+    const allowed = rows.map(r => r.category_id.toString());
 
-    if (normalized.includes("shadow")) {
-        body.classList.add("shadow-theme");
-    } else if (normalized.includes("connection")) {
-        body.classList.add("connection-theme");
-    } else if (normalized.includes("momentum")) {
-        body.classList.add("momentum-theme");
-    } else {
-        body.classList.add("core-theme");
-    }
-}
-
-function drawMessage() {
-    const deck = document.getElementById("deckSelect").value;
-    const category = document.getElementById("categorySelect").value;
-    const messageEl = document.getElementById("message");
-
-    // Start shuffle animation
-    messageEl.classList.remove("revealed");
-    messageEl.classList.add("shuffle");
-
-    // Small delay to let the shuffle animation play before showing new text
-    setTimeout(() => {
-        let sql = "SELECT text FROM messages WHERE 1=1";
-        const params = [];
-
-        if (deck !== "any") {
-            sql += " AND deck_id = ?";
-            params.push(deck);
+    for (let option of catSelect.options) {
+        if (option.value === "any") {
+            option.hidden = false;
+            option.classList.add("fade-in");
+            continue;
         }
 
-        if (category !== "any") {
-            sql += " AND category_id = ?";
-            params.push(category);
-        }
+        const show = allowed.includes(option.value);
 
-        sql += " ORDER BY RANDOM() LIMIT 1;";
-
-        const result = query(sql, params);
-
-        if (result.length > 0) {
-            messageEl.textContent = result[0].text;
+        if (show) {
+            option.hidden = false;
+            option.classList.add("fade-in");
         } else {
-            messageEl.textContent = "No messages match this selection.";
+            option.hidden = true;
         }
+    }
 
-        // End shuffle, reveal card
-        messageEl.classList.remove("shuffle");
-        // Force reflow so the reveal animation always triggers
-        void messageEl.offsetWidth;
-        messageEl.classList.add("revealed");
-    }, 250); // you can tweak this delay to taste
+    if (catSelect.selectedOptions[0].hidden) {
+        catSelect.value = "any";
+    }
 }
 
-document.getElementById("draw").addEventListener("click", drawMessage);
+/* Deck Theme */
+function applyTheme(deckValue) {
+    document.body.className = "";
+
+    if (deckValue === "1") document.body.classList.add("core-theme");
+    if (deckValue === "2") document.body.classList.add("shadow-theme");
+    if (deckValue === "3") document.body.classList.add("connection-theme");
+    if (deckValue === "4") document.body.classList.add("momentum-theme");
+}
+
+/* Reveal Message */
+function revealMessage() {
+    const deck = document.getElementById("deckSelect").value;
+    const cat = document.getElementById("categorySelect").value;
+
+    let sql = "SELECT text FROM messages WHERE 1=1";
+    const params = [];
+
+    if (deck !== "any") {
+        sql += " AND deck_id = ?";
+        params.push(deck);
+    }
+
+    if (cat !== "any") {
+        sql += " AND category_id = ?";
+        params.push(cat);
+    }
+
+    sql += " ORDER BY RANDOM() LIMIT 1";
+
+    const rows = query(sql, params);
+    const card = document.getElementById("card");
+    const msg = document.getElementById("message");
+
+    if (rows.length === 0) {
+        msg.textContent = "No messages match this selection.";
+    } else {
+        msg.textContent = rows[0].text;
+    }
+
+    card.classList.remove("visible");
+    setTimeout(() => card.classList.add("visible"), 50);
+}
+
+/* Event Listeners */
+document.getElementById("deckSelect").addEventListener("change", e => {
+    applyTheme(e.target.value);
+    filterCategoriesForDeck(e.target.value);
+});
+
+document.getElementById("revealBtn").addEventListener("click", revealMessage);
 
 loadDatabase();

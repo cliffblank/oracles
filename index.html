@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Oracle</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
     <div class="container">
+
         <h1 class="title">Oracle</h1>
 
         <div class="controls">
-            <label>Deck:</label>
-            <select id="deckSelect">
-                <option value="any">Any Deck</option>
-            </select>
 
-            <label>Category:</label>
-            <select id="categorySelect">
-                <option value="any">Any Category</option>
-            </select>
+            <!-- Deck Select -->
+            <div class="control-group">
+                <label for="deckSelect">Deck</label>
+                <select id="deckSelect">
+                    <option value="any">Any Deck</option>
+                </select>
+            </div>
+
+            <!-- Category Select with wrapper for icons -->
+            <div class="control-group category-wrapper">
+                <label for="categorySelect">Category</label>
+                <select id="categorySelect">
+                    <option value="any">Any Category</option>
+                </select>
+            </div>
+
         </div>
 
-        <div id="message" class="message">Click below for your message</div>
+        <button id="revealBtn" class="reveal-btn">Reveal</button>
 
-        <button id="draw" class="button">Reveal</button>
+        <div id="card" class="card">
+            <div id="message" class="message"></div>
+        </div>
+
     </div>
 
-    <script src="lib/sqljs/sql-wasm.js"></script>
+    <!-- SQL.js -->
+    <script src="sql-wasm.js"></script>
     <script src="oracle.js"></script>
 </body>
 </html>

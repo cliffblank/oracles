@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Outer star -->
+    <path d="M12 3.5v3.2M12 17.3v3.2M5 12h3.2M15.8 12H19"/>
+    <path d="M7.3 7.3l2.3 2.3M14.4 14.4l2.3 2.3M7.3 16.7l2.3-2.3M14.4 9.6l2.3-2.3"/>
+    <!-- Inner core -->
+    <circle cx="12" cy="12" r="2.1"/>
+  </g>
+</svg>
